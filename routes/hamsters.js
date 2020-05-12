@@ -1,8 +1,16 @@
 const { Router } = require("express");
-const router = new Router();
-const { data, update } = require("./../db")
+const { auth, db } = require("./../firebase");
 
-router.get('/:id/:name', async (req, res) => {
-    let id = req.params.id;
-    let name = (req.params.name);
-})
+const router = new Router();
+
+router.get("/:id", async (req, res) => {
+  let docs = [];
+  let snapShot = await db.collection("hamsters").doc(req.params.id).get();
+  snapShot.forEach((doc) => {
+    docs.push(doc.data());
+  });
+
+  res.send({ hamsters: docs });
+});
+
+module.exports = router;
