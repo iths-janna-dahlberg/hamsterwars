@@ -1,7 +1,8 @@
-const { db } = require("./../firebase");
+const { db, auth } = require("./../firebase");
 const { Router } = require("express");
 
 const router = new Router();
+
 
 //GET all Hamsters
 
@@ -17,20 +18,20 @@ router.get("/", async (req, res) => {
 
   res.send({ hamsters: hamsters });
 });
+//create
 
 
 // GET hamster by id
 
 router.get("/:id", async (req, res) => {
+  let hamster = [];
 
-  let id = req.params.id;
-
-  let snapShot = await db.collection("hamsters").doc(req.params.id).get();
+  let snapShot = await db.collection('hamsters').doc('hamsters').collection(req.params.id).get();
   snapShot.forEach(doc => {
-    hamsters.push(doc.data());
-  });
+    hamster.push(doc.data());
+  })
 
-  res.send({ hamster: id })
+  res.send({ hamsters: hamster })
 
 });
 
